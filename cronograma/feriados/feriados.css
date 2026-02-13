@@ -1,0 +1,254 @@
+/* Archivo: feriados.css */
+/* Función: Estilos del módulo Feriados (sin top-bar) */
+
+:root {
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #4b5563;
+
+  --primary: #0b3954;
+  --primaryHover: #082538;
+
+  --danger: #b91c1c;
+  --dangerHover: #7f1d1d;
+
+  --line: #e5e7eb;
+  --line2: #c4c8d0;
+
+  --soft: rgba(15, 23, 42, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.screen {
+  padding: 16px 24px 32px;
+}
+
+.screen-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--muted);
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* Panel principal */
+.feriados-panel {
+  margin-top: 14px;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px 16px 18px;
+  box-shadow: 0 1px 3px var(--soft);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Header: año + acciones */
+.feriados-header {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(260px, 1.2fr);
+  gap: 12px 16px;
+  align-items: end;
+}
+
+.year-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.year-label {
+  min-width: 90px;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line2);
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* Acciones rápidas */
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Status */
+.status {
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #334155;
+}
+.status--ok { border-color: #bbf7d0; background: #f0fdf4; }
+.status--warn { border-color: #fde68a; background: #fffbeb; }
+.status--bad { border-color: #fecaca; background: #fff1f2; }
+
+/* Botones */
+.btn {
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #f9fafb;
+}
+.btn-primary:hover { background: var(--primaryHover); }
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: var(--text);
+}
+.btn-secondary:hover { background: #d1d5db; }
+
+.btn-light {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid #d1d5db;
+}
+.btn-light:hover { background: #f3f4f6; }
+
+.btn-danger {
+  background: var(--danger);
+  color: #f9fafb;
+}
+.btn-danger:hover { background: var(--dangerHover); }
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line2);
+  font-size: 13px;
+}
+
+/* Agregar / editar feriado */
+.feriados-add {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+
+  display: grid;
+  grid-template-columns: minmax(180px, 0.9fr) minmax(260px, 1.6fr) auto;
+  gap: 8px 12px;
+  align-items: end;
+}
+
+.add-field--button {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Tabla */
+.feriados-table {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table thead {
+  background: var(--primary);
+  color: #f9fafb;
+}
+
+.table th,
+.table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.table tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+/* Botón icono 🗑 (mejorado) */
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #334155;
+}
+
+.icon-btn:hover {
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+.icon-btn:hover svg {
+  fill: #b91c1c;
+}
+
+.icon-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .feriados-header {
+    grid-template-columns: 1fr;
+  }
+
+  .feriados-add {
+    grid-template-columns: 1fr;
+  }
+
+  .add-field--button {
+    justify-content: flex-end;
+  }
+}

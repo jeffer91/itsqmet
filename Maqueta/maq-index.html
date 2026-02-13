@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Maquetador UTET – Requisitos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="maq-ui.css" />
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+  <div id="maq-app-root">
+    <header id="maq-header">
+      <div id="maq-logo-area">
+        <span id="maq-logo-text">Requisitos UTET</span>
+        <span id="maq-logo-sub">Maquetador modular</span>
+      </div>
+
+      <div id="maq-header-status">
+        <span id="maq-current-module-label">Sin módulo</span>
+
+        <button id="maq-btn-refresh" type="button" class="maq-icon-btn" title="Refrescar módulo actual">
+          Refrescar
+        </button>
+      </div>
+    </header>
+
+    <nav id="maq-main-menu"></nav>
+
+    <main id="maq-main-layout">
+      <section id="maq-main-panel">
+        <div id="maq-main-frame-host" aria-label="Contenedor de módulos"></div>
+      </section>
+    </main>
+
+    <footer id="maq-footer">
+      <span>Maquetador UTET · Módulos independientes · Versión Automática</span>
+    </footer>
+  </div>
+
+  <script src="maq-autodata.js"></script>
+
+  <script src="maq-firebase.js"></script>
+  <script src="maq-utils.js"></script>
+  <script src="maq-modulos-registry.js"></script>
+  <script src="maq-config-service.js"></script>
+  <script src="maq-menu.js"></script>
+  <script src="maq-core.js"></script>
+</body>
+</html>

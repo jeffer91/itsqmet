@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Config Cronogramas</title>
+  <link rel="stylesheet" href="./config.css" />
+</head>
+
+<body>
+  <main class="page">
+    <section class="card">
+      <header class="head">
+        <div>
+          <h1>Configuración de Cronogramas</h1>
+          <p class="sub">Plantillas por tipo. Guardado en Firestore.</p>
+        </div>
+        <div class="pill" id="cfg-status">Listo</div>
+      </header>
+
+      <div class="grid">
+        <!-- Columna izquierda -->
+        <aside class="box">
+          <h2 class="h2">Plantillas</h2>
+
+          <div class="fg">
+            <label for="cfg-tipo">Tipo</label>
+            <select id="cfg-tipo" class="in">
+              <option value="articulo">Artículo</option>
+              <option value="complexivo">Complexivo</option>
+              <option value="trabajo">Trabajo</option>
+            </select>
+          </div>
+
+          <div class="fg">
+            <label for="cfg-plant">Plantilla</label>
+            <select id="cfg-plant" class="in"></select>
+            <div class="mini" id="cfg-plantinfo"></div>
+          </div>
+
+          <div class="btncol">
+            <button class="btn pri" id="cfg-new" type="button">Nueva</button>
+            <button class="btn sec" id="cfg-saveas" type="button">Guardar como nueva</button>
+            <button class="btn sec" id="cfg-save" type="button">Guardar</button>
+            <button class="btn red" id="cfg-del" type="button">Eliminar</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <h2 class="h2">Importar Excel</h2>
+          <div class="mini">Sube el archivo y carga directo en pantalla. Luego guardas.</div>
+
+          <input id="cfg-xfile" class="in" type="file" accept=".xlsx,.xls" />
+          <div class="btncol">
+            <button class="btn sec" id="cfg-xload" type="button">Cargar Excel</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <h2 class="h2">Historial</h2>
+          <div class="mini">Versiones como respaldo.</div>
+          <div class="btncol">
+            <button class="btn sec" id="cfg-hist" type="button">Abrir historial</button>
+          </div>
+        </aside>
+
+        <!-- Columna derecha -->
+        <section class="box">
+          <header class="row">
+            <div>
+              <h2 class="h2">Actividades</h2>
+              <div class="mini">Orden automático. Días mínimo 1. Fecha de fin de clases obligatoria.</div>
+            </div>
+            <div class="row">
+              <button class="btn pri" id="cfg-add" type="button">+ Actividad</button>
+            </div>
+          </header>
+
+          <div class="tblwrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th style="width:70px;">#</th>
+                  <th>Nombre</th>
+                  <th style="width:90px;">Días</th>
+                  <th style="width:150px;">Grupo</th>
+                  <th style="width:240px;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="cfg-act"></tbody>
+            </table>
+          </div>
+
+          <div class="hr"></div>
+
+          <h2 class="h2">Estado</h2>
+          <div class="row" style="justify-content:flex-start;">
+            <div class="mini" id="cfg-msg">Listo.</div>
+            <button class="btn sec" id="cfg-copyerr" type="button">Copiar detalle</button>
+          </div>
+
+          <div class="log" id="cfg-log"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal único -->
+  <div class="modal hidden" id="cfg-m" aria-hidden="true">
+    <div class="mcard">
+      <div class="mhead">
+        <div class="mtitle" id="cfg-mtitle">Modal</div>
+        <button class="x" id="cfg-mx" type="button">✕</button>
+      </div>
+      <div class="mbody" id="cfg-mbody"></div>
+    </div>
+  </div>
+
+  <!-- XLSX -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <script type="module" src="./config.init.js"></script>
+</body>
+</html>

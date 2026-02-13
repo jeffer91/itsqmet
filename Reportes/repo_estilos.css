@@ -1,0 +1,314 @@
+/* =========================================================
+Archivo: repo_estilos.css
+Ruta: reportes/repo_estilos.css
+Función: Estilos Dashboard Split-View
+========================================================= */
+
+:root{
+  --sidebar-bg:#ffffff;
+  --viewer-bg:#525659;
+  --primary:#1F4E79;
+  --accent:#3498db;
+  --border:#e0e0e0;
+  --text:#333;
+}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',Roboto,sans-serif;
+  overflow:hidden;
+  height:100vh;
+  color:var(--text);
+}
+
+/* LAYOUT */
+.app-layout{
+  display:grid;
+  grid-template-columns:360px 1fr;
+  height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  background:var(--sidebar-bg);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  padding:20px;
+  overflow-y:auto;
+  box-shadow:2px 0 10px rgba(0,0,0,0.05);
+  z-index:10;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:25px;
+  color:var(--primary);
+}
+.brand h1{margin:0;font-size:1.4rem;}
+.brand small{color:#7f8c8d;}
+.brand .material-icons-round{font-size:2rem;}
+
+.control-group{
+  margin-bottom:25px;
+  padding-bottom:20px;
+  border-bottom:1px solid #f0f0f0;
+}
+.group-label{
+  display:block;
+  font-size:0.85rem;
+  text-transform:uppercase;
+  color:#95a5a6;
+  font-weight:bold;
+  margin-bottom:10px;
+  letter-spacing:0.5px;
+}
+
+.input-row{margin-bottom:10px;}
+.input-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.mt-10{margin-top:10px;}
+
+label{display:block;font-size:0.85rem;margin-bottom:4px;font-weight:500;}
+
+input,select{
+  width:100%;
+  padding:8px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  box-sizing:border-box;
+  font-size:0.9rem;
+  transition:border 0.2s;
+}
+input:focus,select:focus{border-color:var(--primary);outline:none;}
+.full-width{width:100%;}
+
+.toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+}
+.toggle-row input{width:auto;}
+
+/* DROPZONE */
+.dropzone{
+  border:2px dashed #bdc3c7;
+  border-radius:8px;
+  padding:20px;
+  text-align:center;
+  background:#f9f9f9;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.dropzone:hover,.dropzone.dragover{
+  background:#eaf2f8;
+  border-color:var(--accent);
+}
+.dropzone .icon-lg{font-size:48px;color:#bdc3c7;margin-bottom:5px;}
+.dropzone p{margin:5px 0;font-size:0.9rem;color:#333;}
+.dropzone small{font-size:0.8rem;color:#7f8c8d;}
+
+/* ANEXOS GRID */
+.anexos-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:15px;
+}
+.anexo-thumb{
+  position:relative;
+  width:100%;
+  aspect-ratio:1;
+  border-radius:6px;
+  overflow:hidden;
+  border:1px solid #eee;
+}
+.anexo-thumb img{width:100%;height:100%;object-fit:cover;}
+.anexo-remove{
+  position:absolute;
+  top:2px;
+  right:2px;
+  background:rgba(192,57,43,0.9);
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:20px;
+  height:20px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+}
+
+/* FOOTER ACTIONS */
+.actions-footer{margin-top:auto;}
+.status-text{
+  font-size:0.8rem;
+  color:#7f8c8d;
+  margin-bottom:10px;
+  text-align:center;
+  min-height:1.2em;
+}
+.btn-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn{
+  border:none;
+  padding:10px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  color:white;
+  transition:filter 0.2s;
+}
+.btn:hover{filter:brightness(1.1);}
+.btn-primary{background:var(--primary);}
+.btn-danger{background:#c0392b;}
+
+/* VISOR */
+.viewer-area{
+  background:var(--viewer-bg);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+.viewer-toolbar{
+  background:rgba(0,0,0,0.2);
+  padding:10px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  backdrop-filter:blur(5px);
+}
+
+.pagination{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  background:rgba(255,255,255,0.1);
+  padding:4px 10px;
+  border-radius:20px;
+}
+
+.icon-btn{
+  background:none;
+  border:none;
+  color:white;
+  cursor:pointer;
+  padding:4px;
+  display:flex;
+  align-items:center;
+  border-radius:50%;
+}
+.icon-btn:hover{background:rgba(255,255,255,0.2);}
+
+#page-indicator{font-size:0.9rem;font-weight:500;}
+.loader{font-size:0.85rem;color:#2ecc71;font-weight:bold;}
+.hidden{display:none;}
+
+/* BOTONES TOP */
+.toolbar-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.btn-toolbar{
+  border:none;
+  border-radius:18px;
+  padding:6px 12px;
+  cursor:pointer;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:white;
+  background:rgba(255,255,255,0.12);
+}
+.btn-toolbar:hover{background:rgba(255,255,255,0.18);}
+.btn-toolbar .material-icons-round{font-size:18px;}
+
+/* ✅ PREVIEW ORGANIZADO */
+.document-scroll{
+  flex:1;
+  overflow-y:auto;
+  padding:18px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+.paper-canvas{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  align-items:center;
+}
+
+/* ✅ HOJA A4 VERTICAL */
+.hoja-word{
+  background:white;
+  width:21cm;
+  min-height:29.7cm;
+  padding:2.5cm;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  box-sizing:border-box;
+  border-radius:2px;
+}
+
+/* Placeholder */
+.placeholder-state{
+  background:white;
+  height:500px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  color:#95a5a6;
+}
+.placeholder-state .material-icons-round{
+  font-size:64px;
+  margin-bottom:10px;
+  opacity:0.5;
+}
+
+/* Header simulado */
+.header-simulado{margin-top:10px;}
+.header-simulado table{
+  width:85%;
+  margin:0 auto;
+  border-collapse:collapse;
+  border:1px solid #ccc;
+  font-family:'Times New Roman',serif;
+}
+.header-simulado td{
+  border:1px solid #ccc;
+  padding:5px;
+  vertical-align:middle;
+}
+
+/* tablas preview */
+.tabla-preview{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:0.9rem;
+}
+.tabla-preview th{
+  background:#f2f2f2;
+  padding:8px;
+  text-align:left;
+  border:1px solid #ddd;
+}
+.tabla-preview td{
+  padding:8px;
+  border:1px solid #ddd;
+}

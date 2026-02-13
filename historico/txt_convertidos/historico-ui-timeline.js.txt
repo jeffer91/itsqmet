@@ -1,0 +1,42 @@
+const HistoricoUITimeline = {
+  render(containerId, cuts, onSelect) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    if (!cuts || !cuts.length) {
+      el.innerHTML = `
+        <div class="historico-empty">
+          No hay cortes guardados en <b>historial</b> para este período.
+          <br><br>
+          Usa <b>Generar corte</b> para crear el primero.
+        </div>
+      `;
+      return;
+    }
+
+    el.innerHTML = cuts.map(c => {
+      const dateTxt = HistoricoLogic.formatDate(c.createdAt) || "(sin fecha)";
+      const total = c?.meta?.totalEstudiantes ?? "-";
+      const changed = c?.meta?.changedCells ?? 0;
+
+      return `
+        <div class="timeline-card" data-id="${c.id}">
+          <strong>${HistoricoUtils.esc(dateTxt)}</strong>
+          <div>
+            <span class="badge blue">Total ${HistoricoUtils.esc(total)}</span>
+            <span class="badge gray">Δ ${HistoricoUtils.esc(changed)}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    el.querySelectorAll(".timeline-card").forEach(card => {
+      card.addEventListener("click", () => onSelect(card.dataset.id));
+    });
+  },
+
+  setActive(id) {
+    document.querySelectorAll(".timeline-card")
+      .forEach(c => c.classList.toggle("active", c.dataset.id === id));
+  }
+};

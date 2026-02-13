@@ -1,0 +1,261 @@
+<!-- =========================================================
+Archivo: defart.html
+Ruta - Ubicación: /defart/defart.html
+Función o funciones:
+- UI principal DefArt (Defensa de Artículo Académico)
+- Filtros: Periodo, Carrera, Estado
+- Botones: Cargar notas, Importar Excel, Exportar Excel
+- Buscador (cédula / nombre / carrera)
+- Tabla
+- Modal “Cargar notas” con preview en TABLA
+========================================================= -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DefArt • Gestión de Notas</title>
+  <link rel="stylesheet" href="defart.css" />
+</head>
+<body>
+  <!-- ============== HEADER / TOPBAR ============== -->
+
+  <!-- ============== LAYOUT ============== -->
+  <main class="container">
+    <!-- ============== PANEL CONTROLES ============== -->
+    <section class="panel panel-controls" aria-label="Controles DefArt">
+      <div class="controls-grid">
+        <!-- Filtros -->
+        <div class="field">
+          <label for="defart-filter-periodo">Periodo</label>
+          <select id="defart-filter-periodo" class="select">
+            <option value="">Todos</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="defart-filter-carrera">Carrera</label>
+          <select id="defart-filter-carrera" class="select">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="defart-filter-estado">Estado</label>
+        <select id="defart-filter-estado" class="select">
+          <option value="">Todos</option>
+          <option value="REG">Regular</option>
+          <option value="SUPL">Supletorio</option>
+          <option value="BLOQ">Bloqueado</option>
+          <option value="SIN">Sin notas</option> <!-- ✅ Filtra st.code === "SIN" (Rules.computeState) -->
+        </select>
+        </div>
+
+        <div class="field search">
+          <label for="defart-search">Buscar</label>
+          <div class="search-wrap">
+            <span class="search-icon" aria-hidden="true">🔎</span>
+            <input id="defart-search" class="input" type="text"
+              placeholder="Cédula / Nombres / Carrera"
+              autocomplete="off" />
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="field actions">
+          <label>Acciones</label>
+          <div class="actions-row">
+            <button class="btn btn-primary" id="defart-btn-cargar" type="button">
+              🧠 Cargar notas
+            </button>
+            <button class="btn btn-accent" id="defart-btn-import" type="button">
+              📥 Importar Excel
+            </button>
+            <button class="btn btn-success" id="defart-btn-export" type="button">
+              📤 Exportar Excel
+            </button>
+          </div>
+          <div class="mini-hint">
+            Importación inteligente: analiza y luego pregunta destino ART / DEF / FINAL.
+          </div>
+        </div>
+      </div>
+
+      <div class="statusbar">
+        <div class="status-left">
+          <span class="pill pill-blue" id="defart-pill-total">Total: 0</span>
+          <span class="pill pill-green" id="defart-pill-regular">Regular: 0</span>
+          <span class="pill pill-amber" id="defart-pill-supl">Supletorio: 0</span>
+          <span class="pill pill-red" id="defart-pill-bloq">Bloqueado: 0</span>
+        </div>
+        <div class="status-right">
+          <div id="defart-status" class="status-text">Listo.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== TABLA ============== -->
+    <section class="panel panel-table" aria-label="Tabla DefArt">
+      <div class="table-wrap">
+        <table class="table" role="table" aria-label="Tabla de estudiantes DefArt">
+          <thead>
+            <tr>
+              <th class="col-idx">#</th>
+              <th class="col-ced">Cédula</th>
+              <th>Estudiante</th>
+              <th>Carrera</th>
+              <th class="col-num">Notart</th>
+              <th class="col-num">Notdef</th>
+              <th class="col-num col-final">Notafinal</th>
+              <th class="col-estado">Estado</th>
+              <th class="col-save">Guardar</th>
+            </tr>
+          </thead>
+          <tbody id="defart-tbody">
+            <tr>
+              <td colspan="9" class="empty">
+                Cargando… Si esto no cambia, revisa que Firestore esté inicializado.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="dot dot-green"></span> Regular</div>
+        <div class="legend-item"><span class="dot dot-amber"></span> Supletorio</div>
+        <div class="legend-item"><span class="dot dot-red"></span> Bloqueado (faltan requisitos)</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============== FAB GUARDAR VISIBLE ============== -->
+  <button class="fab" id="defart-fab-save" type="button" title="Guardar todas las filas visibles">
+    💾 Guardar visible
+  </button>
+
+  <!-- ============== MODAL CARGAR NOTAS ============== -->
+  <div class="modal-backdrop" id="defart-modal-backdrop" aria-hidden="true"></div>
+
+  <section class="modal" id="defart-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Cargar notas">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title">🧠 Cargar notas (inteligente)</div>
+          <div class="modal-sub">Pega una tabla o carga Excel, luego el sistema analiza y pregunta destino.</div>
+        </div>
+        <button class="btn btn-ghost" id="defart-modal-close" type="button">✖</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="field">
+            <label for="defart-modal-paste">Pegar tabla</label>
+            <textarea id="defart-modal-paste" class="textarea" rows="10"
+              placeholder="Pega aquí desde Excel / Moodle / Word…"></textarea>
+            <div class="mini-hint">
+              Soporta coma o punto, escalas 0–10 y 0–100, y encabezados repetidos.
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Excel</label>
+            <div class="excel-row">
+              <input id="defart-modal-file" class="file" type="file" accept=".xlsx,.xls" />
+              <div class="file-name" id="defart-modal-file-name">Ningún archivo</div>
+            </div>
+
+            <div class="field">
+              <label>Destino (si hay una sola nota)</label>
+              <div class="choice-row" id="defart-modal-target">
+                <button class="chip" type="button" data-target="ASK">Preguntar</button>
+                <button class="chip" type="button" data-target="ART">ART</button>
+                <button class="chip" type="button" data-target="DEF">DEF</button>
+                <button class="chip" type="button" data-target="FINAL">FINAL</button>
+              </div>
+              <div class="mini-hint">
+                Si eliges FINAL, el sistema pondrá la misma nota en Notart y Notdef.
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Errores / Alertas</label>
+            <pre class="pre" id="defart-modal-errors">—</pre>
+          </div>
+
+          <!-- ✅ CAMBIO: vista previa ahora es TABLA -->
+          <div class="field">
+            <label>Vista previa</label>
+
+            <div class="preview-wrap" id="defart-modal-preview" aria-label="Vista previa en tabla">
+              <div class="preview-meta" id="defart-preview-meta">—</div>
+              <div class="preview-table-wrap">
+                <table class="preview-table" role="table" aria-label="Vista previa importación">
+                  <thead>
+                    <tr>
+                      <th>Cédula</th>
+                      <th>Nombre</th>
+                      <th class="pv-note-h">Nota</th>
+                    </tr>
+                  </thead>
+                  <tbody id="defart-preview-tbody">
+                    <tr><td colspan="3" class="pv-empty">—</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn btn-accent" id="defart-modal-analyze" type="button">🔎 Analizar</button>
+        <button class="btn btn-primary" id="defart-modal-apply" type="button" disabled>✅ Aplicar a tabla</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SCRIPTS ============== -->
+  <!-- 0) Firebase (COMPAT) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- 0.1) Init Firestore para DefArt -->
+  <script src="firebase.init.js"></script>
+
+  <!-- 1) utils / reglas / data: base del sistema -->
+  <script src="defart.utils.js"></script>
+  <script src="defart.rules.js"></script>
+  <script src="defart.data.js"></script>
+
+  <!-- 2) Módulos principales DefArt -->
+  <script src="defart.table.js"></script>
+  <script src="defart.ui.js"></script>
+  <script src="defart.storage.js"></script>
+
+  <!-- ✅ NUEVO: capa de vista del importer (debe ir ANTES del importer.js) -->
+  <script src="defart.importer.view.js"></script>
+
+  <script src="defart.importer.js"></script>
+  <script src="defart.app.js"></script>
+
+  <!-- Boot mínimo de UI (fallback) -->
+  <script>
+    (function () {
+      if (!window.DefArtApp) {
+        var s = document.getElementById("defart-status");
+        if (s) s.textContent = "UI cargada. Verifica que defart.app.js esté cargando correctamente.";
+      }
+      var help = document.getElementById("defart-btn-help");
+      if (help) help.addEventListener("click", function () {
+        alert(
+          "DefArt: Sistema para gestionar Notart/Notdef/Notafinal.\n\n" +
+          "Si aparece 'No se detecta DefArtDB', falta inicializar Firebase/Firestore antes de DefArt.\n"
+        );
+      });
+    })();
+  </script>
+</body>
+</html>

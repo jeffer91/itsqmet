@@ -1,0 +1,286 @@
+<!-- =======================================================
+Archivo: excel.html
+Ruta: /Gestion/Excel/excel.html
+Función: Pantalla Excel supermodular (Periodo/Cargar/Resumen/Borrado/Historial)
+======================================================= -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gestión Excel</title>
+  <link rel="stylesheet" href="excel.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="topbar">
+      <div class="topbar-title">
+        <div>
+          <div class="t1">Gestión Excel</div>
+          <div class="t2">Periodo → Cargar archivo → Resumen → Borrado → Historial</div>
+        </div>
+      </div>
+      <div class="badge">Supermodular</div>
+    </div>
+
+    <!-- 1) Periodo (MINIMAL: solo crear) -->
+    <section class="block" id="sec-periodo">
+      <div class="block-head">
+        <h3>Periodo</h3>
+        <span class="block-hint">Crea el período de trabajo</span>
+      </div>
+
+      <div class="row">
+        <div class="field small">
+          <label>Inicio (mes)</label>
+          <select id="inicioMes">
+            <option value="">Mes</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+        </div>
+
+        <div class="field small">
+          <label>Inicio (año)</label>
+          <input id="inicioAnio" type="number" min="2000" max="2100" value="2026" />
+        </div>
+
+        <div class="field small">
+          <label>Fin (mes)</label>
+          <select id="finMes">
+            <option value="">Mes</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+        </div>
+
+        <div class="field small">
+          <label>Fin (año)</label>
+          <input id="finAnio" type="number" min="2000" max="2100" value="2026" />
+        </div>
+
+        <div class="btnbar">
+          <button id="excel-add-period-btn" class="btn primary">Crear periodo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Cargar archivo (OBLIGA seleccionar período existente) -->
+    <section class="block" id="sec-cargar">
+      <div class="block-head">
+        <h3>Cargar archivo</h3>
+        <span class="block-hint">Primero selecciona un período ya creado, luego sube el archivo</span>
+      </div>
+
+      <div class="row">
+        <div class="field medium">
+          <label>Período (existente)</label>
+          <select id="excel-cargar-period-select"></select>
+        </div>
+
+        <div class="field file">
+          <label>Archivo Excel</label>
+          <input type="file" id="excel-file-input" />
+        </div>
+
+        <div class="btnbar">
+          <button id="excel-analyze-save-btn" class="btn primary" disabled>Analizar</button>
+        </div>
+      </div>
+
+      <div class="hint">
+        Si no seleccionas un período, el archivo y el botón se bloquearán.
+        El botón primero analiza y luego guarda.
+      </div>
+    </section>
+
+    <!-- 3) Resumen -->
+    <section class="block" id="sec-resumen">
+      <div class="block-head">
+        <h3>Resumen</h3>
+        <span class="block-hint">Validación + métricas + consolidado global</span>
+      </div>
+
+      <div id="excel-schema-box" class="schema-box"></div>
+      <pre id="excel-summary-box" class="mono box-out">Selecciona un período y analiza un archivo.</pre>
+    </section>
+
+    <!-- 4) Borrado -->
+    <section class="block danger-zone" id="sec-borrado">
+      <div class="block-head">
+        <h3>Borrado</h3>
+        <span class="block-hint">Acciones destructivas (requiere confirmación)</span>
+      </div>
+
+      <div class="row">
+        <div class="field medium">
+          <label>Período a borrar</label>
+          <select id="excel-delete-period-select"></select>
+        </div>
+
+        <div class="field small">
+          <label>Alumnos del período</label>
+          <div class="period-pill" style="justify-content:space-between; gap:10px;">
+            <span>Total</span>
+            <span id="excel-delete-students-count" style="font-weight:900;">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="danger-note">
+          <strong>Atención:</strong> “Borrar período completo” elimina alumnos + historial + documento del período.
+        </div>
+
+        <div class="btnbar">
+          <button id="excel-delete-students-btn" class="btn danger">Borrar SOLO alumnos</button>
+          <button id="excel-delete-period-full-btn" class="btn danger solid">Borrar PERÍODO COMPLETO</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) Historial -->
+    <section class="block" id="sec-historial">
+      <div class="block-head">
+        <h3>Historial</h3>
+        <span class="block-hint">Versiones globales por período (sin nombres)</span>
+      </div>
+
+      <div id="excel-history" class="history"></div>
+    </section>
+
+    <!-- ======================================================
+      0) Firebase/Firestore (OBLIGATORIO)
+      - Este bloque crea window.db
+      - Usa compat para poder usar db.collection(...)
+    ======================================================= -->
+
+    <!-- Firebase v9 compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <script>
+      // ✅ Config real (UTET)
+      const FIREBASE_CONFIG = window.FIREBASE_CONFIG || {
+        apiKey: "AIzaSyCaHf1C0BB0X_H3BDZ1o-UDAsPmLTjsZLA",
+        authDomain: "utet-4387a.firebaseapp.com",
+        projectId: "utet-4387a",
+        storageBucket: "utet-4387a.firebasestorage.app",
+        messagingSenderId: "902848131454",
+        appId: "1:902848131454:web:47f515eb6480834724c32f"
+      };
+
+      (function initFirestore() {
+        try {
+          if (!window.firebase || !firebase.initializeApp || !firebase.firestore) {
+            console.error("[excel.html] Firebase compat no cargó. Revisa los scripts firebase-*-compat.js.");
+            return;
+          }
+
+          const values = FIREBASE_CONFIG ? Object.values(FIREBASE_CONFIG) : [];
+          const hasPlaceholders = values.some(v => String(v || "").trim() === "REEMPLAZAR");
+
+          if (!FIREBASE_CONFIG || !FIREBASE_CONFIG.projectId || hasPlaceholders) {
+            console.error("[excel.html] FIREBASE_CONFIG inválido. Pega la config real (sin 'REEMPLAZAR').");
+            return;
+          }
+
+          if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+
+          window.db = firebase.firestore();
+          console.log("[excel.html] Firestore OK. projectId:", FIREBASE_CONFIG.projectId);
+        } catch (e) {
+          console.error("[excel.html] Error inicializando Firestore:", e);
+        }
+      })();
+    </script>
+
+    <!-- ======================================================
+      0.5) SheetJS (XLSX) OBLIGATORIO PARA excel-reader.js
+      - Necesario para .xls, .xlsx y HTML "disfrazado"
+      - Debe ir ANTES de excel-reader.js
+    ======================================================= -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <!-- ======================================================
+      1) Módulos Excel (requieren window.db ya listo)
+    ======================================================= -->
+    <script src="excel-constants.js"></script>
+    <script src="excel-state.js"></script>
+
+    <script src="excel-periodos.js"></script>
+
+    <!-- ✅ reader después de XLSX -->
+    <script src="excel-reader.js"></script>
+
+    <script src="excel-logic.js"></script>
+    <script src="excel-estados.js"></script>
+
+    <script src="excel-estudiantes.repo.js"></script>
+    <script src="excel-historial.repo.js"></script>
+    <script src="excel-delete.service.js"></script>
+    <script src="excel-save.service.js"></script>
+
+    <script src="excel-ui.periodo.js"></script>
+    <script src="excel-ui.cargar.js"></script>
+    <script src="excel-ui.resumen.js"></script>
+    <script src="excel-ui.borrado.js"></script>
+    <script src="excel-ui.historial.js"></script>
+
+    <script src="excel-ui.js"></script>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const y = new Date().getFullYear();
+        const iniA = document.getElementById("inicioAnio");
+        const finA = document.getElementById("finAnio");
+        if (iniA && !String(iniA.value || "").trim()) iniA.value = String(y);
+        if (finA && !String(finA.value || "").trim()) finA.value = String(y);
+
+        // ✅ Verificación clave: XLSX debe existir
+        if (!window.XLSX) {
+          alert("XLSX NO está cargado. Revisa el script xlsx.full.min.js o bloqueos de red.");
+          console.error("XLSX no cargó. window.XLSX es undefined.");
+          return;
+        }
+
+        if (!window.db) {
+          alert("Firestore NO está inicializado. Revisa FIREBASE_CONFIG y recarga.");
+          console.error("Firestore no inicializado: window.db no existe. Revisa FIREBASE_CONFIG en excel.html.");
+          return;
+        }
+
+        if (!window.ExcelUI) {
+          console.error("ExcelUI no cargó.");
+          return;
+        }
+
+        window.ExcelUI.boot();
+      });
+    </script>
+
+  </div>
+</body>
+</html>

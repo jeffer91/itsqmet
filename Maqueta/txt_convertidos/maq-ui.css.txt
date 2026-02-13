@@ -1,0 +1,386 @@
+/* Archivo: maq-ui.css */
+/* Utilidad: Estilos globales del maquetador y de la pantalla de configuración del menú. */
+
+:root{
+  color-scheme: light;
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: rgba(15, 23, 42, 0.10);
+  --shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  --primary: #2563eb;
+  --primary-600: #1d4ed8;
+  --accent: #ef4444;
+  --radius: 14px;
+}
+
+/* Layout general del maquetador UTET sin panel lateral */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+#maq-app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER --------------------------------------------------------- */
+
+#maq-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  background: var(--surface);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+}
+
+#maq-logo-area {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+#maq-logo-text{
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--primary-600);
+  font-size: 1.05rem;
+}
+
+#maq-logo-sub{
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-left: 0.65rem;
+}
+
+#maq-header-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#maq-current-module-label{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.10);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+/* BOTÓN REFRESCAR ------------------------------------------------ */
+
+.maq-icon-btn{
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--text);
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: transform 0.06s ease, background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.maq-icon-btn:hover{
+  background: rgba(15, 23, 42, 0.07);
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+.maq-icon-btn:active{
+  transform: translateY(1px);
+}
+
+.maq-icon-btn:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* MENÚ ----------------------------------------------------------- */
+
+#maq-main-menu {
+  position: sticky;
+  top: 58px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.maq-menu-item {
+  position: relative;
+  border: 1px solid transparent;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--primary-600);
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: transform 0.06s ease, background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.maq-menu-item:hover {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.18);
+}
+
+.maq-menu-item:active {
+  transform: translateY(1px);
+}
+
+.maq-menu-item.maq-active {
+  background: var(--primary);
+  color: #fff;
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.18);
+}
+
+.maq-menu-item-has-sub::after {
+  content: "▾";
+  font-size: 0.6rem;
+  margin-left: 0.25rem;
+}
+
+/* SUBMENÚ -------------------------------------------------------- */
+
+.maq-submenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 220px;
+  padding: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.maq-submenu-item {
+  font-size: 0.88rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.maq-submenu-item:hover {
+  background-color: rgba(37, 99, 235, 0.10);
+  color: var(--primary-600);
+}
+
+/* CONTENEDOR PRINCIPAL ------------------------------------------- */
+
+#maq-main-layout {
+  flex: 1;
+  display: flex;
+}
+
+#maq-main-panel{
+  flex: 1;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+/* Host para múltiples iframes (cache real) */
+#maq-main-frame-host{
+  width: 100%;
+  height: calc(100vh - 160px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #ffffff;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Iframes cacheados */
+.maq-frame{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #ffffff;
+}
+
+.maq-frame-hidden{
+  display: none;
+}
+
+/* FOOTER ---------------------------------------------------------- */
+
+#maq-footer{
+  padding: 0.75rem 1.25rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+/* ----------------------- CONFIG MENU (ADMIN) ---------------------- */
+
+.maq-config-body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.maq-config-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 2rem;
+}
+
+.maq-config-header {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--shadow);
+}
+
+.maq-config-header h1 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.maq-config-subtitle {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.maq-config-actions {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.maq-btn-primary,
+.maq-btn-success,
+.maq-btn-secondary {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.55rem 0.85rem;
+  font-weight: 650;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.maq-btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.maq-btn-success {
+  background: #16a34a;
+  color: #fff;
+}
+
+.maq-btn-secondary {
+  background: rgba(15, 23, 42, 0.06);
+  color: var(--text);
+}
+
+.maq-config-status {
+  margin-left: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.maq-config-table-section {
+  margin-top: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  box-shadow: var(--shadow);
+}
+
+.maq-config-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.maq-config-table th,
+.maq-config-table td {
+  padding: 0.6rem 0.55rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.maq-config-table th {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.maq-config-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.maq-config-table input[type="text"],
+.maq-config-table input[type="number"],
+.maq-config-table select {
+  width: 100%;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.9rem;
+  background: #fff;
+  outline: none;
+}
+
+.maq-config-table input[type="text"]:focus,
+.maq-config-table input[type="number"]:focus,
+.maq-config-table select:focus {
+  border-color: rgba(37, 99, 235, 0.45);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+}
+
+.maq-config-checkbox-cell {
+  width: 90px;
+}

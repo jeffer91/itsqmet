@@ -1,0 +1,121 @@
+// tabla-firebase.js
+// ACCESO PRINCIPAL A FIRESTORE PARA LA PANTALLA TABLA
+// -----------------------------------------------------
+// Corrección: Busca por "periodoId" (OK)
+// ACTUALIZACIÓN (2026-01-07):
+// - Sort compatible con nueva BD: Nombres / nombres
+// -----------------------------------------------------
+
+(function (window) {
+  "use strict";
+
+  let db = null;
+
+  function ensureDb() {
+    if (db) return db;
+
+    if (!window.firebase || !firebase.firestore) {
+      console.error("[tabla-firebase] Firebase no está disponible.");
+      alert("Firebase no está cargado. Revisa los <script>.");
+      return null;
+    }
+
+    try {
+      db = firebase.firestore();
+      console.log("📡 tabla-firebase conectado a Firestore.");
+      return db;
+    } catch (err) {
+      console.error("[tabla-firebase] Error inicializando Firestore:", err);
+      alert("Error inicializando Firestore.");
+      return null;
+    }
+  }
+
+  async function obtenerPeriodos() {
+    const db = ensureDb();
+    if (!db) return [];
+
+    const snap = await db.collection("periodos").get();
+    const arr = [];
+
+    snap.forEach((doc) => {
+      const data = doc.data();
+      arr.push({
+        id: data.id || doc.id,
+        label: data.label || "(sin nombre)",
+        creadoEn: data.creadoEn || ""
+      });
+    });
+
+    arr.sort((a, b) => {
+      if (!a.creadoEn && !b.creadoEn) return 0;
+      if (!a.creadoEn) return 1;
+      if (!b.creadoEn) return -1;
+      return a.creadoEn < b.creadoEn ? 1 : -1;
+    });
+
+    return arr;
+  }
+
+  async function obtenerEstudiantes(periodoId) {
+    const db = ensureDb();
+    if (!db) return [];
+
+    if (!periodoId) return [];
+
+    const snap = await db
+      .collection("Estudiantes")
+      .where("periodoId", "==", periodoId)
+      .get();
+
+    const arr = [];
+    snap.forEach((doc) => {
+      arr.push({
+        _id: doc.id,
+        ...doc.data()
+      });
+    });
+
+    // Sort compatible (nuevo + viejo)
+    arr.sort((a, b) => {
+      const na = ((a.Nombres || a.nombres || "") + "").toUpperCase();
+      const nb = ((b.Nombres || b.nombres || "") + "").toUpperCase();
+      if (na < nb) return -1;
+      if (na > nb) return 1;
+      return 0;
+    });
+
+    return arr;
+  }
+
+  async function guardarObservaciones(obsArray = []) {
+    const db = ensureDb();
+    if (!db) return;
+    if (!Array.isArray(obsArray) || obsArray.length === 0) return;
+
+    const batch = db.batch();
+    const ahoraIso = new Date().toISOString();
+
+    obsArray.forEach((item) => {
+      const id = item.id;
+      const texto = (item.observacion || "").trim();
+
+      if (!id) return;
+
+      const ref = db.collection("Estudiantes").doc(id);
+      batch.update(ref, {
+        observaciones: texto,
+        observacionesActualizadoEn: ahoraIso
+      });
+    });
+
+    await batch.commit();
+    console.log("[tabla-firebase] Observaciones guardadas:", obsArray.length);
+  }
+
+  window.TablaFirebase = {
+    obtenerPeriodos,
+    obtenerEstudiantes,
+    guardarObservaciones
+  };
+})(window);
